@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TAAS Services — Transformation as a Service</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#fbf9f5; --surface:#ffffff; --ink:#1a1d23; --muted:#5d6570;
+  --line:#e2ded4; --brand:#1d5c4f; --brand-soft:#e3efeb; --brand-ink:#124036;
+  --accent:#c2703a; --accent-soft:#fbeade;
+  --shadow:0 1px 2px rgba(26,29,35,.06),0 4px 12px rgba(26,29,35,.04);
+  --serif:'Fraunces',Georgia,serif; --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#14171b; --surface:#1d2127; --ink:#eceef1; --muted:#9ba3ad;
+  --line:#2e343c; --brand:#6cc0a9; --brand-soft:#17302b; --brand-ink:#9fd8c8;
+  --accent:#e0956a; --accent-soft:#33231a; --shadow:0 1px 3px rgba(0,0,0,.45);}}
+:root[data-theme="dark"]{--bg:#14171b;--surface:#1d2127;--ink:#eceef1;--muted:#9ba3ad;
+  --line:#2e343c;--brand:#6cc0a9;--brand-soft:#17302b;--brand-ink:#9fd8c8;
+  --accent:#e0956a;--accent-soft:#33231a;--shadow:0 1px 3px rgba(0,0,0,.45);}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-text-size-adjust:100%}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px 90px}
+header{background:var(--surface);border-bottom:1px solid var(--line)}
+.head-in{max-width:900px;margin:0 auto;padding:20px}
+.brand{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap}
+.brand h1{font-family:var(--serif);font-size:1.5rem;font-weight:600;margin:0;letter-spacing:-.01em}
+.brand span{font-size:.85rem;color:var(--muted)}
+nav{display:flex;gap:4px;flex-wrap:wrap;margin-top:14px}
+nav button{font:500 .88rem var(--sans);padding:7px 13px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--muted);cursor:pointer}
+nav button:hover{background:var(--brand-soft);color:var(--ink)}
+nav button[aria-current="true"]{background:var(--brand);color:#fff}
+nav button:disabled{opacity:.4;cursor:not-allowed}
+h2{font-family:var(--serif);font-size:1.45rem;font-weight:600;margin:30px 0 8px;letter-spacing:-.01em}
+h3{font-size:1.02rem;font-weight:600;margin:22px 0 8px}
+p.lede{color:var(--muted);margin:0 0 20px;max-width:64ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:16px;box-shadow:var(--shadow)}
+label{display:block;font-size:.82rem;font-weight:600;color:var(--muted);margin-bottom:5px}
+select,input[type=text]{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);font:400 .95rem var(--sans)}
+select:focus,input:focus{outline:2px solid var(--brand);outline-offset:1px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px}
+button.btn{font:600 .92rem var(--sans);padding:11px 20px;border-radius:9px;border:1px solid var(--brand);background:var(--brand);color:#fff;cursor:pointer}
+button.btn.ghost{background:transparent;color:var(--brand)}
+button.btn:disabled{opacity:.45;cursor:not-allowed}
+button.btn:hover:not(:disabled){filter:brightness(1.08)}
+.qblock{border-top:1px solid var(--line);padding:18px 0}
+.qblock:first-of-type{border-top:0;padding-top:4px}
+.qtext{font-size:1rem;margin:0 0 12px;max-width:62ch}
+.opts{display:flex;flex-wrap:wrap;gap:7px}
+.opts input{position:absolute;opacity:0;width:0;height:0}
+.opts label{margin:0;padding:8px 14px;border:1px solid var(--line);border-radius:999px;cursor:pointer;
+  font:500 .86rem var(--sans);color:var(--muted);background:var(--surface)}
+.opts input:checked+label{background:var(--brand);border-color:var(--brand);color:#fff}
+.opts input:focus-visible+label{outline:2px solid var(--brand);outline-offset:2px}
+.dimhead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.dimhead b{font-family:var(--serif);font-size:1.15rem;font-weight:600}
+.dimhead span{font-size:.82rem;color:var(--muted)}
+.progress{height:6px;border-radius:4px;background:var(--line);overflow:hidden;margin:16px 0 4px}
+.progress i{display:block;height:100%;background:var(--brand);transition:width .25s}
+.pnote{font-size:.8rem;color:var(--muted)}
+.scorerow{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--line)}
+.scorerow:last-child{border-bottom:0}
+.scorerow .nm{flex:1 1 170px;font-weight:600;font-size:.95rem}
+.track{flex:2 1 190px;height:9px;border-radius:5px;background:var(--line);overflow:hidden}
+.track i{display:block;height:100%;border-radius:5px}
+.val{flex:0 0 74px;text-align:right;font-family:var(--serif);font-weight:600;font-size:1.05rem}
+.tag{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 9px;border-radius:999px;margin-left:7px}
+.t-low{background:var(--accent-soft);color:var(--accent)}
+.t-mid{background:var(--brand-soft);color:var(--brand-ink)}
+.t-high{background:var(--brand);color:#fff}
+.step{display:flex;gap:16px;padding:18px 0;border-top:1px solid var(--line)}
+.step:first-of-type{border-top:0}
+.num{flex:0 0 34px;height:34px;border-radius:50%;background:var(--brand-soft);color:var(--brand-ink);
+  display:grid;place-items:center;font-weight:600;font-size:.9rem}
+.step .body{flex:1}
+.step h4{margin:0 0 3px;font-size:1rem;font-weight:600}
+.step .meta{font-size:.8rem;color:var(--muted);margin:0 0 7px}
+.step p{margin:0;font-size:.92rem;color:var(--muted);max-width:60ch}
+.pill{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 9px;border-radius:999px;
+  background:var(--brand-soft);color:var(--brand-ink);margin-left:6px}
+.pill.soon{background:var(--line);color:var(--muted)}
+.why{background:var(--brand-soft);border-radius:11px;padding:16px 18px;margin:4px 0 18px}
+.why b{display:block;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--brand-ink);margin-bottom:5px}
+.why p{margin:0;font-size:.92rem;color:var(--ink)}
+.empty{color:var(--muted);font-style:italic;padding:12px 0}
+.note{font-size:.83rem;color:var(--muted);margin-top:12px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+footer{border-top:1px solid var(--line);margin-top:44px;padding-top:18px;font-size:.83rem;color:var(--muted)}
+.hidden{display:none}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:12px;margin-bottom:16px}
+.kpi div{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:14px}
+.kpi b{display:block;font-family:var(--serif);font-size:1.5rem;font-weight:600}
+.kpi span{font-size:.79rem;color:var(--muted)}
+@media(max-width:560px){.brand h1{font-size:1.25rem}h2{font-size:1.25rem}}
+</style>
+</head>
+<body>
+<header><div class="head-in">
+  <div class="brand"><h1>TAAS Services</h1><span>Transformation as a Service</span></div>
+  <nav>
+    <button data-tab="start" aria-current="true">Start</button>
+    <button data-tab="assess">Assessment</button>
+    <button data-tab="report" id="tabReport" disabled>Your report</button>
+    <button data-tab="path" id="tabPath" disabled>Learning path</button>
+    <button data-tab="about">About</button>
+  </nav>
+</div></header>
+
+<div class="wrap">
+
+<section id="start">
+  <h2>Find out what to fix first</h2>
+  <p class="lede">Most small businesses know they should be using better tools. Far fewer know which gap to close first. This ten-minute assessment scores your business across five dimensions of digital maturity, then builds a learning path that starts with your weakest one.</p>
+  <div class="card">
+    <h3 style="margin-top:0">Tell us about the business</h3>
+    <div class="grid2">
+      <div><label for="bname">Business name (optional)</label><input type="text" id="bname" placeholder="e.g. Harbour Lane Bakery" autocomplete="off"></div>
+      <div><label for="bsize">Number of employees</label>
+        <select id="bsize"><option value="1">Just me</option><option value="2-5" selected>2 to 5</option>
+        <option value="6-15">6 to 15</option><option value="16-50">16 to 50</option></select></div>
+      <div><label for="bsector">Sector</label>
+        <select id="bsector"><option>Retail</option><option>Food service</option>
+        <option selected>Professional services</option><option>Trades and construction</option>
+        <option>Health and wellness</option><option>Other</option></select></div>
+      <div><label for="bpri">What matters most right now?</label>
+        <select id="bpri"><option value="ops" selected>Getting organised internally</option>
+        <option value="cust">Finding and keeping customers</option>
+        <option value="data">Understanding my numbers</option>
+        <option value="ai">Using AI without wasting money</option></select></div>
+    </div>
+    <div class="row" style="margin-top:18px"><button class="btn" id="goAssess">Begin assessment</button></div>
+    <p class="note">Nothing is sent anywhere. Your answers stay in this browser and can be cleared at any time.</p>
+  </div>
+</section>
+
+<section id="assess" class="hidden">
+  <h2>Digital maturity assessment</h2>
+  <p class="lede">Twenty questions across five dimensions. Answer for how things actually work today, not how you intend them to work. An honest low score produces a more useful path.</p>
+  <div class="progress"><i id="bar" style="width:0%"></i></div>
+  <p class="pnote" id="pcount">0 of 20 answered</p>
+  <div id="qarea"></div>
+  <div class="row" style="margin-top:20px">
+    <button class="btn" id="seeReport" disabled>See my report</button>
+    <button class="btn ghost" id="clearAll">Clear answers</button>
+  </div>
+</section>
+
+<section id="report" class="hidden">
+  <h2>Your digital maturity report</h2>
+  <p class="lede">Each dimension is scored out of 100. The lowest scores are where effort pays back fastest, because weak foundations make everything built on them harder.</p>
+  <div class="kpi" id="kpis"></div>
+  <div class="card"><h3 style="margin-top:0">Scores by dimension</h3><div id="scores"></div></div>
+  <div class="card"><h3 style="margin-top:0">What this means</h3><div id="interp"></div></div>
+  <div class="row"><button class="btn" id="goPath">Build my learning path</button>
+    <button class="btn ghost" id="download">Download report</button></div>
+</section>
+
+<section id="path" class="hidden">
+  <h2>Your learning path</h2>
+  <p class="lede">Generated by PathFinder from your scores and your stated priority. The order matters more than the contents: foundations first, then the work that depends on them.</p>
+  <div class="why" id="why"></div>
+  <div class="card" id="pathArea"></div>
+  <p class="note">Modules marked <span class="pill">Pilot</span> are available now. The remainder are in development and scheduled for release across the curriculum build.</p>
+</section>
+
+<section id="about" class="hidden">
+  <h2>About TAAS Services</h2>
+  <div class="card">
+    <h3 style="margin-top:0">The problem</h3>
+    <p>Small business owners know they should adopt cloud tools, data practices and AI, but not what to adopt first, in what order, or whether their team can operate it. They buy tools that go unused, or postpone the decision indefinitely. Research on digital transformation in small businesses identifies limited budget, scarce technical expertise and organisational inertia as the recurring barriers. These are capability problems rather than software problems, so buying more software does not solve them.</p>
+    <h3>Our approach</h3>
+    <p>Consulting delivers the outcome but takes the knowledge away with it, and costs thousands per engagement. Open course catalogues are affordable but require the learner to diagnose their own gap first, which is exactly what these owners cannot do. TAAS Services sits between the two: diagnose the gap, then close it with short practical training that leaves the capability inside the team.</p>
+    <h3>How PathFinder decides</h3>
+    <p>The ranking of dimensions is rules-based, not AI-generated: dimensions are ordered by score, then adjusted for dependency, because data practices built on absent foundations do not hold. Your stated priority promotes its dimension by one position but cannot override a foundational gap. This keeps the recommendation explainable and reproducible, which a black box would not be. The reasoning shown on the learning path page is the actual rule that fired.</p>
+    <h3>Scope of this version</h3>
+    <p>This is the MVP. The assessment, scoring and path generation are complete and functional. Three pilot modules are authored; the remaining modules are in development. AI-written feedback on module exercises (CoachBot) is specified and scheduled for the next build.</p>
+    <h3>Team</h3>
+    <p>Team 2 &middot; Mohammad Abu Sufian (P26385) &middot; Mohammad Abdul Karim (P26414) &middot; Umme Habiba (P26403) &middot; Nasrin Akter (P26411)</p>
+    <p style="color:var(--muted);font-size:.88rem">STEM505: Project Management with SaaS &middot; Prof. Sungho Kim &middot; Pacific States University &middot; Fall 2026</p>
+  </div>
+</section>
+
+<footer>TAAS Services &middot; Team 2 &middot; STEM505, Pacific States University</footer>
+</div>
+
+<script>
+"use strict";
+var DIMS=[
+{id:"found",name:"Digital foundations",blurb:"Accounts, storage, backup and access hygiene",
+ qs:["Business files are stored somewhere the whole team can reach, not on one person's device.",
+     "There is a backup that would survive a lost or broken laptop.",
+     "Each person has their own login rather than sharing one account.",
+     "When someone leaves, there is a clear way to remove their access."]},
+{id:"ops",name:"Operations and workflow",blurb:"How recurring work is tracked and handed over",
+ qs:["Recurring work is tracked in a shared system rather than in someone's head.",
+     "You can see what stage a job or order is at without asking anyone.",
+     "Handovers between people follow a set process rather than a message.",
+     "At least one routine task has been automated or given a template."]},
+{id:"data",name:"Data and measurement",blurb:"What gets recorded, and whether anyone reads it",
+ qs:["Sales or job records are captured consistently rather than reconstructed later.",
+     "Someone reviews the numbers on a regular schedule.",
+     "You could say which product, service or customer is most profitable.",
+     "A decision in the last six months was changed by something the numbers showed."]},
+{id:"cust",name:"Customer engagement",blurb:"Channels, records and follow-up",
+ qs:["Customer contact details are held in one place the team can use.",
+     "You can see the history of what a customer has bought or asked about.",
+     "Follow-up after a sale or enquiry happens by process, not by memory.",
+     "You know which channel brings in most of your customers."]},
+{id:"ai",name:"AI readiness",blurb:"Awareness, identified use cases, staff confidence",
+ qs:["Someone in the business has actually used an AI tool for real work.",
+     "You could name a specific task in the business that AI could take on.",
+     "Staff would be comfortable trying a new tool without extensive training.",
+     "There is an agreed view on what should not be given to an AI tool."]}
+];
+var OPTS=[{v:1,t:"Not at all"},{v:2,t:"A little"},{v:3,t:"Mostly"},{v:4,t:"Fully"}];
+
+var MODULES={
+found:[{t:"Get your files out of one laptop",m:"18 min",pilot:true,d:"Choosing shared storage, moving files without losing them, and setting up a backup that actually runs."},
+ {t:"Accounts and access, done once",m:"15 min",d:"Individual logins, password practice, and a joiner-leaver routine that takes five minutes."}],
+ops:[{t:"Put your work on a board",m:"20 min",pilot:true,d:"Turning the jobs in your head into a shared board, so status is visible without a phone call."},
+ {t:"Write down one process",m:"16 min",d:"Documenting the handover that goes wrong most often, and turning it into a checklist."},
+ {t:"Automate one repeating task",m:"18 min",d:"Finding the task you do every week and removing the manual steps from it."}],
+data:[{t:"Record the right five things",m:"17 min",pilot:true,d:"Deciding the minimum you should capture per sale or job, and where it goes."},
+ {t:"Read your numbers monthly",m:"15 min",d:"A thirty-minute monthly review that tells you what changed and what to do about it."},
+ {t:"Find what actually makes money",m:"20 min",d:"Working out margin by product, service or customer, rather than by overall revenue."}],
+cust:[{t:"One list of customers",m:"16 min",d:"Consolidating contacts into a single usable record without buying a CRM."},
+ {t:"Follow up by process",m:"18 min",d:"Designing the follow-up that happens whether or not anyone remembers."},
+ {t:"Know where customers come from",m:"15 min",d:"Tracking source without analytics expertise, and acting on what it shows."}],
+ai:[{t:"Your first useful AI task",m:"20 min",d:"Picking one real task, running it, and judging whether the output was worth it."},
+ {t:"What not to put into AI tools",m:"14 min",d:"A plain rule for customer data, pricing and anything confidential."},
+ {t:"AI that fits your workflow",m:"18 min",d:"Connecting an AI step into work you already do, rather than adding a new habit."}]};
+
+var PRIMAP={ops:"ops",cust:"cust",data:"data",ai:"ai"};
+var KEY="taas-services-v1";
+var st={profile:{},answers:{}};
+
+function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);
+  if(o&&typeof o==="object"){st.profile=o.profile||{};st.answers=o.answers||{};}}}catch(e){console.warn(e);}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){console.warn(e);}}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){
+  return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function answered(){return Object.keys(st.answers).length;}
+function dimScore(d){var t=0,n=0;
+  for(var i=0;i<d.qs.length;i++){var v=st.answers[d.id+"-"+i];if(v){t+=v;n++;}}
+  if(!n)return null;
+  return Math.round(((t/n)-1)/3*100);}
+function band(s){return s<40?["Needs work","t-low"]:s<70?["Developing","t-mid"]:["Strong","t-high"];}
+
+var tabs=document.querySelectorAll("nav button"),panels=["start","assess","report","path","about"];
+function show(name){
+  tabs.forEach(function(b){b.setAttribute("aria-current",String(b.dataset.tab===name));});
+  panels.forEach(function(p){document.getElementById(p).classList.toggle("hidden",p!==name);});
+  if(name==="report")renderReport();
+  if(name==="path")renderPath();
+  window.scrollTo(0,0);}
+tabs.forEach(function(b){b.addEventListener("click",function(){if(!b.disabled)show(b.dataset.tab);});});
+
+document.getElementById("goAssess").onclick=function(){
+  st.profile={name:document.getElementById("bname").value.trim(),
+    size:document.getElementById("bsize").value,
+    sector:document.getElementById("bsector").value,
+    pri:document.getElementById("bpri").value};
+  save();show("assess");};
+
+function renderQs(){
+  var a=document.getElementById("qarea");a.innerHTML="";
+  DIMS.forEach(function(d){
+    var c=document.createElement("div");c.className="card";
+    c.innerHTML='<div class="dimhead"><b>'+esc(d.name)+'</b><span>'+esc(d.blurb)+'</span></div>';
+    d.qs.forEach(function(q,i){
+      var id=d.id+"-"+i,wrap=document.createElement("div");wrap.className="qblock";
+      var h='<p class="qtext">'+esc(q)+'</p><div class="opts">';
+      OPTS.forEach(function(o){
+        var rid=id+"-"+o.v,ck=st.answers[id]===o.v?" checked":"";
+        h+='<input type="radio" name="'+id+'" id="'+rid+'" value="'+o.v+'"'+ck+'><label for="'+rid+'">'+o.t+'</label>';});
+      h+='</div>';wrap.innerHTML=h;
+      wrap.querySelectorAll("input").forEach(function(inp){
+        inp.onchange=function(){st.answers[id]=parseInt(inp.value,10);save();updateProgress();};});
+      c.appendChild(wrap);});
+    a.appendChild(c);});
+  updateProgress();}
+
+function updateProgress(){
+  var n=answered(),pct=Math.round(n/20*100);
+  document.getElementById("bar").style.width=pct+"%";
+  document.getElementById("pcount").textContent=n+" of 20 answered";
+  var done=n===20;
+  document.getElementById("seeReport").disabled=!done;
+  document.getElementById("tabReport").disabled=!done;
+  document.getElementById("tabPath").disabled=!done;}
+
+document.getElementById("seeReport").onclick=function(){show("report");};
+document.getElementById("goPath").onclick=function(){show("path");};
+document.getElementById("clearAll").onclick=function(){
+  if(!confirm("Clear all answers and start again?"))return;
+  st.answers={};save();renderQs();show("assess");};
+
+function ranked(){
+  var arr=DIMS.map(function(d){return {d:d,s:dimScore(d)};});
+  arr.sort(function(a,b){return a.s-b.s;});
+  var order=["found","ops","data","cust","ai"];
+  // dependency guard: a weak foundation always leads
+  var f=arr.filter(function(x){return x.d.id==="found";})[0];
+  if(f&&f.s<40&&arr[0].d.id!=="found"){arr=arr.filter(function(x){return x.d.id!=="found";});arr.unshift(f);}
+  return arr;}
+
+function renderReport(){
+  var arr=DIMS.map(function(d){return {d:d,s:dimScore(d)};});
+  var overall=Math.round(arr.reduce(function(a,b){return a+b.s;},0)/arr.length);
+  var weakest=arr.slice().sort(function(a,b){return a.s-b.s;})[0];
+  document.getElementById("kpis").innerHTML=
+    '<div><b>'+overall+'</b><span>Overall maturity</span></div>'+
+    '<div><b>'+band(overall)[0]+'</b><span>Current band</span></div>'+
+    '<div><b>'+esc(weakest.d.name.split(" ")[0])+'</b><span>Weakest dimension</span></div>';
+  var h="";
+  arr.forEach(function(x){
+    var b=band(x.s);
+    h+='<div class="scorerow"><div class="nm">'+esc(x.d.name)+'<span class="tag '+b[1]+'">'+b[0]+'</span></div>'+
+       '<div class="track"><i style="width:'+x.s+'%;background:'+(x.s<40?"var(--accent)":"var(--brand)")+'"></i></div>'+
+       '<div class="val">'+x.s+'</div></div>';});
+  document.getElementById("scores").innerHTML=h;
+  var lows=arr.filter(function(x){return x.s<40;}),mids=arr.filter(function(x){return x.s>=40&&x.s<70;});
+  var t="";
+  if(lows.length)t+="<p>"+lows.length+" dimension"+(lows.length>1?"s":"")+" scored below 40, which usually means the basics are not yet in place there. Work starting here tends to pay back fastest, because the other dimensions depend on it.</p>";
+  if(mids.length)t+="<p>"+mids.length+" dimension"+(mids.length>1?"s are":" is")+" developing. Something works, but it depends on particular people remembering to do it. That is where businesses lose time without noticing.</p>";
+  if(!lows.length&&!mids.length)t+="<p>Every dimension scored 70 or above. Your gains now come from depth rather than coverage, and the path below reflects that.</p>";
+  t+="<p style=\"color:var(--muted);font-size:.9rem\">Scores reflect how things work today, not what is planned. Re-assessing after three months is the intended way to measure whether the training changed anything.</p>";
+  document.getElementById("interp").innerHTML=t;}
+
+function renderPath(){
+  var arr=ranked(),pri=PRIMAP[st.profile.pri]||"ops";
+  // priority promotion: move the stated priority up one place, never above a weak foundation
+  var idx=arr.findIndex(function(x){return x.d.id===pri;});
+  if(idx>1&&!(arr[0].d.id==="found"&&arr[0].s<40&&idx===2)){
+    var it=arr.splice(idx,1)[0];arr.splice(idx-1,0,it);}
+  var focus=arr.slice(0,3);
+  var reasons=[];
+  reasons.push(focus[0].d.name+" scored lowest at "+focus[0].s+", so the path starts there.");
+  if(arr[0].d.id==="found"&&arr[0].s<40)reasons.push("Digital foundations were promoted to first position: below 40, everything built on them is fragile.");
+  if(idx>-1&&focus.some(function(x){return x.d.id===pri;}))reasons.push("Your stated priority was moved up one position, but not above a foundational gap.");
+  reasons.push("Dimensions scoring 70 or above were left out; they are not where your next gain is.");
+  document.getElementById("why").innerHTML="<b>Why this order</b><p>"+esc(reasons.join(" "))+"</p>";
+  var h="",n=1;
+  focus.forEach(function(x){
+    var mods=MODULES[x.d.id]||[];
+    mods.forEach(function(m){
+      h+='<div class="step"><div class="num">'+n+'</div><div class="body"><h4>'+esc(m.t)+
+        (m.pilot?'<span class="pill">Pilot</span>':'<span class="pill soon">In development</span>')+'</h4>'+
+        '<p class="meta">'+esc(x.d.name)+' &middot; '+esc(m.m)+'</p><p>'+esc(m.d)+'</p></div></div>';
+      n++;});});
+  var total=focus.reduce(function(a,b){return a+(MODULES[b.d.id]||[]).length;},0);
+  document.getElementById("pathArea").innerHTML=
+    '<h3 style="margin-top:0">'+total+' modules, roughly '+(total*17)+' minutes of learning</h3>'+h;}
+
+document.getElementById("download").onclick=function(){
+  var arr=DIMS.map(function(d){return {d:d,s:dimScore(d)};});
+  var L=["TAAS SERVICES — DIGITAL MATURITY REPORT",""];
+  L.push("Business: "+(st.profile.name||"(not given)"));
+  L.push("Size: "+st.profile.size+" employees   Sector: "+st.profile.sector);
+  L.push("Date: "+new Date().toDateString(),"","SCORES BY DIMENSION");
+  arr.forEach(function(x){L.push("  "+x.d.name+": "+x.s+"/100 ("+band(x.s)[0]+")");});
+  var overall=Math.round(arr.reduce(function(a,b){return a+b.s;},0)/arr.length);
+  L.push("","Overall maturity: "+overall+"/100","","RECOMMENDED LEARNING PATH");
+  var f=ranked().slice(0,3),n=1;
+  f.forEach(function(x){(MODULES[x.d.id]||[]).forEach(function(m){
+    L.push("  "+n+". "+m.t+"  ["+x.d.name+", "+m.m+"]");n++;});});
+  L.push("","Generated by TAAS Services · Team 2 · STEM505");
+  var txt=L.join("\n");
+  try{var b=new Blob([txt],{type:"text/plain"}),u=URL.createObjectURL(b),a=document.createElement("a");
+    a.href=u;a.download="taas-maturity-report.txt";document.body.appendChild(a);a.click();
+    document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(u);},1500);}
+  catch(e){alert("Download unavailable here; the report has been printed to the console.");console.log(txt);}};
+
+load();
+if(st.profile.size){document.getElementById("bsize").value=st.profile.size;
+  document.getElementById("bsector").value=st.profile.sector||"Professional services";
+  document.getElementById("bpri").value=st.profile.pri||"ops";
+  document.getElementById("bname").value=st.profile.name||"";}
+renderQs();
+</script>
+</body>
+</html>
